@@ -1,0 +1,27 @@
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Office lock and temporary files
+~$*
+*.tmp
+*.temp
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Local Python environments
+.venv/
+venv/
+env/
+
+# IDE and editor state
+.vscode/
+.idea/
+
+# Repeated distribution archives
+*.zip
