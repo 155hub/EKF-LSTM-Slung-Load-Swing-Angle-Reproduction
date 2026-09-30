@@ -1,96 +1,175 @@
-# EKF-LSTM Slung-Load Swing-Angle Reproduction
+# 基于 EKF-LSTM 的无人机吊载摆角估计复现
 
-基于 **EKF + LSTM** 的无人机吊载摆角估计半物理仿真复现实验。
+本项目是基于 **扩展卡尔曼滤波（EKF）与长短期记忆网络（LSTM）** 的无人机吊载摆角估计半物理仿真复现实验。
 
-本仓库整理了复现实验使用的代码、PX4 SITL / Gazebo Classic 仿真数据、训练与独立测试结果，以及完整的数据来源和复现说明。实验首先使用扩展卡尔曼滤波器（EKF）依据飞行状态估计吊载摆角，再由长短期记忆网络（LSTM）学习并补偿 EKF 的系统性误差。
+仓库包含复现实验使用的代码、PX4 SITL 与 Gazebo Classic 仿真数据、模型训练记录、独立测试结果，以及数据来源和文件完整性说明。算法首先使用 EKF 根据飞行状态估计吊载摆角，再由 LSTM 学习并补偿 EKF 的系统性误差。
 
-> 当前整理版本采用仓库基线流程进行离线验证，目标是确认 EKF 与 EKF-LSTM 在独立飞行数据上的效果。论文方向的进一步改进应建立在该基线结果之上。
+> 当前版本按照原仓库基线流程完成离线验证，主要用于确认 EKF 与 EKF-LSTM 在独立飞行数据上的估计效果。面向论文方法的进一步改进应建立在该基线结果之上。
 
-## Repository layout
+## 内容导航
+
+| 内容 | 目录 | 说明 |
+|---|---|---|
+| 实验结果 | [results/](results/) | 训练曲线、测试对比图、误差指标和结果汇总表 |
+| 复现代码 | [code/](code/) | 数据采集、训练、测试、核心算法和仿真配置 |
+| 实验数据 | [datasets/](datasets/) | 原仓库数据及新生成的训练、验证和测试数据 |
+
+详细说明：
+
+- [实验结果说明](results/README.md)
+- [代码使用说明](code/README.md)
+- [数据集来源与字段说明](datasets/README.md)
+- [实验结果汇总表](results/结果汇总.xlsx)
+
+## 仓库目录
 
 ```text
 .
-├── README.md
+├── README.md                    # 仓库总说明
 ├── results/                     # 训练曲线、测试对比图与结果汇总表
+│   ├── README.md
+│   ├── 结果汇总.xlsx
+│   ├── 01_训练曲线/
+│   └── 02_测试对比图/
 ├── code/                        # 复现实验脚本、核心算法与仿真配置
+│   ├── README.md
+│   ├── 01_本次复现实验脚本/
+│   ├── 02_仓库核心算法/
+│   ├── 03_轨迹配置/
+│   └── 04_仿真场景与模型/
 └── datasets/                    # 仓库原始数据与新生成的仿真数据
+    ├── README.md
+    ├── 01_仓库原数据/
+    └── 02_新仿真数据/
+        ├── 训练集/
+        ├── 验证集/
+        └── 测试集/
 ```
 
-每个部分均附带独立 README 和 SHA-256 文件清单，用于说明文件用途并验证复制完整性。
+每个部分均附带独立的 README 和 SHA-256 文件清单，用于说明文件用途并验证文件完整性。
 
-## Environment
+## 实验环境与主要参数
 
-- Windows + WSL2
-- Ubuntu 20.04
-- PX4 SITL
-- Gazebo Classic
-- ROS / MAVROS
-- Python / PyTorch
-- Sampling rate: 50 Hz
-- Sequence length: 400 samples (8 s)
-- LSTM input dimension: 13
-- LSTM architecture: 2 layers, 64 hidden units per layer
-- Loss: mean squared error (MSE)
+| 项目 | 配置 |
+|---|---|
+| 操作系统 | Windows + WSL2、Ubuntu 20.04 |
+| 飞控仿真 | PX4 SITL |
+| 物理仿真 | Gazebo Classic |
+| 通信组件 | ROS / MAVROS |
+| 训练框架 | Python / PyTorch |
+| 采样频率 | 50 Hz |
+| 序列长度 | 400个采样点，即8秒 |
+| LSTM输入维度 | 13 |
+| LSTM结构 | 2层，每层64个隐藏单元 |
+| 损失函数 | 均方误差（MSE） |
 
-## Dataset split
+## 数据集划分
 
-| Split | Flights | Purpose |
+| 数据集 | 飞行次数 | 用途 |
 |---|---:|---|
-| Training | 10 | Train the new-data-only model and participate in mixed training |
-| Validation | 4 | Select the best epoch without tuning on the test set |
-| Test | 4 | Final independent evaluation |
+| 训练集 | 10 | 训练仅新数据模型，并参与混合训练 |
+| 验证集 | 4 | 选择最佳训练轮次，避免使用测试集调参 |
+| 测试集 | 4 | 最终独立效果评估 |
 
-训练、验证和测试飞行相互独立。每次新仿真飞行均提供 CSV 数据和配套 JSON 元数据。仿真采用约 0.5 kg 吊载、2 m 绳长和 0.05 kg 绳质量；真值摆角由 Gazebo 中无人机与吊载连接位置的相对关系计算。
+训练、验证和测试飞行相互独立，没有重复使用同一次飞行数据。每次新仿真飞行均提供 CSV 数据和配套 JSON 元数据。
 
-## Estimation pipeline
+仿真数据的主要条件：
+
+- 单次飞行约180秒；
+- 吊载质量约0.5 kg；
+- 绳长约2 m；
+- 绳质量约0.05 kg；
+- 真值摆角由 Gazebo 中无人机与吊载连接位置的相对关系计算；
+- 测试轨迹包含独立轨迹，其中部分轨迹采用扫频激励，以覆盖不同频率的摆动响应。
+
+## 摆角估计流程
 
 ```text
-Flight log / simulation state
-             |
-             v
-    Extended Kalman Filter
-             |
-             v
-  LSTM error compensation
-             |
-             v
- Corrected swing-angle estimate
-             |
-             v
-Comparison with Gazebo ground truth
+飞行日志或仿真状态
+        │
+        ▼
+扩展卡尔曼滤波（EKF）
+        │
+        ▼
+基础摆角估计及相关飞行状态
+        │
+        ▼
+LSTM 时序误差补偿
+        │
+        ▼
+EKF-LSTM 修正摆角
+        │
+        ▼
+与 Gazebo 摆角真值比较并计算误差指标
 ```
 
-输出包含两个正交水平平面内的摆角分量：`xi` 与 `zeta`。
+模型输出包含两个正交水平平面内的吊载摆角分量：
 
-## Experiments
+- `xi`：一个水平平面方向上的吊载偏转角；
+- `zeta`：与其正交的另一水平平面方向上的吊载偏转角。
 
-- **New-data-only model:** trained for 50 epochs; epoch 39 selected using validation data.
-- **Mixed-data model:** trained for 35 epochs on repository and new simulation data; epoch 33 selected using validation data.
+## 训练与模型选择
 
-混合训练曲线根据已保存的 1–35 轮训练记录重新绘制；整理仓库时没有重新训练，也没有重新生成测试数据。
+### 仅新数据模型
 
-## Contents
+使用10次新仿真训练飞行训练50轮，并根据验证集结果选择第39轮模型。
 
-### Results
+### 混合数据模型
 
-`results/` 包含训练损失曲线、EKF/EKF-LSTM/真值对比图、详细误差指标及可编辑的 Excel 汇总表。
+使用原仓库数据和新仿真数据进行混合训练，共训练35轮，并根据验证集结果选择第33轮模型。
 
-### Code
+混合训练曲线根据已保存的第1至35轮训练记录重新绘制。整理仓库时没有重新训练模型，也没有重新生成测试数据。
 
-`code/` 包含数据采集、训练与统一测试脚本，EKF/LSTM 核心实现，轨迹协议，以及 PX4 SITL / Gazebo 场景和吊载模型配置。
+## 实验结果
 
-### Datasets
+`results/` 中包含：
 
-`datasets/` 包含原仓库训练/测试数据，以及本次独立生成的训练、验证和测试飞行数据。详细来源和字段说明见该目录的 README。
+- 仅新数据模型的训练损失曲线；
+- 混合数据模型的训练损失曲线；
+- 独立测试飞行的 EKF、EKF-LSTM 与真值对比图；
+- 各模型的 RMSE、MAE 和最大绝对误差；
+- 可编辑的 Excel 结果汇总工作簿。
 
-## Interpretation boundary
+建议从[实验结果说明](results/README.md)开始阅读。
 
-本仓库可用于验证完整的数据生成、训练、验证和独立测试流程，并量化比较 EKF 与 EKF-LSTM。单次训练结果不代表模型对所有轨迹、载荷参数和环境均具有普遍优势；进一步研究应增加随机种子、未见轨迹、不同绳长/载荷质量和真实飞行试验。
+## 代码组成
 
-## Integrity
+`code/` 按用途划分为：
 
-各子目录中的 `文件清单_SHA256.csv` 记录文件相对路径、大小和 SHA-256，可用于下载后的完整性校验。
+1. 本次复现实验的数据采集、训练和测试脚本；
+2. 原仓库的 EKF 与 LSTM 核心算法；
+3. 训练、验证和测试轨迹配置；
+4. PX4 SITL、Gazebo 场景及吊载模型配置。
 
-## License
+脚本运行顺序、输入输出和文件关系见[代码使用说明](code/README.md)。
 
-本整理仓库暂未声明独立许可证。原始仓库文件仍应遵守其原有许可证与署名要求；使用或再发布前请核对原项目许可条款。
+## 数据来源
+
+`datasets/` 包含：
+
+- 原仓库提供的训练集和测试集；
+- 本次独立生成的10次训练飞行；
+- 4次验证飞行；
+- 4次独立测试飞行；
+- 每次新仿真飞行对应的 JSON 元数据。
+
+详细的数据生成环境、数据字段和选取记录见[数据集来源与字段说明](datasets/README.md)。
+
+## 结果解释范围
+
+本仓库结果可以用于证明：
+
+- 新生成飞行数据能够完成训练、验证和独立测试流程；
+- EKF 与 EKF-LSTM 可以在相同真值和飞行条件下进行量化比较；
+- 模型在未参与训练的飞行数据上具备可检查的泛化表现；
+- 数据、代码、模型选择记录和结果图片之间具有可追溯关系。
+
+单次训练结果不能证明模型对所有轨迹、吊载参数和环境均具有普遍优势。后续研究可增加不同随机种子、未见轨迹、不同绳长与载荷质量，以及真实飞行试验。
+
+## 文件完整性
+
+各子目录中的 `文件清单_SHA256.csv` 记录文件相对路径、大小和 SHA-256。下载后可重新计算哈希，以确认文件未损坏。
+
+## 许可证说明
+
+本整理仓库暂未声明独立许可证。原始仓库文件仍应遵守其原有许可证与署名要求；使用或再次发布前请核对原项目的许可条款。
