@@ -1,0 +1,67 @@
+{
+  "status": "complete",
+  "duration_s": 180,
+  "rate_hz": 50,
+  "trajectory": "12s hover; four 36s mixed stages; 24s hover; cosine ramps",
+  "flight_config": {
+    "flight_id": "train_07",
+    "split": "train",
+    "seed": 20261020,
+    "duration_s": 180,
+    "stages": [
+      {
+        "kind": "single_axis",
+        "amplitude_m": 0.3839070859771747,
+        "omega_rad_s": 1.665590991174346,
+        "phase_rad": 2.2576680012943084,
+        "rotation_rad": -0.030104743637076936,
+        "ramp_s": 3.722035989523091
+      },
+      {
+        "kind": "lissajous",
+        "amplitude_m": 0.6338513356168636,
+        "omega_rad_s": 1.7009030484883012,
+        "phase_rad": -1.5948473822269529,
+        "rotation_rad": -2.574257079846141,
+        "ramp_s": 3.83363998640141
+      },
+      {
+        "kind": "ellipse",
+        "amplitude_m": 0.9727019419608345,
+        "omega_rad_s": 1.703417241487141,
+        "phase_rad": -2.8244363190099904,
+        "rotation_rad": -2.1475242314787977,
+        "ramp_s": 4.951048803857022
+      },
+      {
+        "kind": "burst",
+        "amplitude_m": 1.189046413762294,
+        "omega_rad_s": 1.7173543819515875,
+        "phase_rad": -0.5843116107097761,
+        "rotation_rad": 3.116151210439199,
+        "ramp_s": 4.961394952099071
+      }
+    ],
+    "test_kind": "same_family_new_parameters"
+  },
+  "config_sha256": "b4bfa5008292b2a166021f32a3caab1549d09e0eaede6196862c9c4604889e23",
+  "trajectory_code_sha256": "08b971b73ce3a35f81a86b6ef456b3a3f6f2abc1cd4b0cbe5f9fb77e9ad54a81",
+  "requested_attitude_target_telemetry_hz": 50,
+  "truth": "repository projection angles from Gazebo world relative link positions",
+  "model": "/mnt/d/RPi_Deployment/EKF-LSTM_for_Swing_Angle_Estimation-main/simulation/models/iris_slung_load/iris_slung_load.sdf",
+  "model_sha256": "fcfa19831973bd74be64d4eadc4ebf7be0b26c73faf7019a6e35ee510a5bea9e",
+  "world_sha256": "e4fe2330913ce499f7fd9be6e0d3b6cac64571d7b276b1022855ede0787dbdcd",
+  "takeoff_support": "deleted after vehicle rises 0.3 m; absent during recording",
+  "collector_sha256": "8f0d7343a4ec4951712ad3adf11dbab1c30dceb7e9dee01a22def4b161ce03dc",
+  "rows": 9000,
+  "skipped": 0,
+  "start_sim_time": 26.636,
+  "landed_disarmed": true,
+  "origin_local": [
+    -0.0011004041880369186,
+    -0.022028138861060143,
+    -0.060467883944511414
+  ],
+  "target_z": 2.9395321160554886,
+  "csv_sha256": "ed18fe65c4f32b3e79d01aa89697e362c47097943fd85beec71338a48124292a"
+}

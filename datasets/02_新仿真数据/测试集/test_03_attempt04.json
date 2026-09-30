@@ -1,0 +1,67 @@
+{
+  "status": "complete",
+  "duration_s": 180,
+  "rate_hz": 50,
+  "trajectory": "12s hover; four 36s mixed stages; 24s hover; cosine ramps",
+  "flight_config": {
+    "flight_id": "test_03",
+    "split": "test",
+    "seed": 20261216,
+    "duration_s": 180,
+    "stages": [
+      {
+        "kind": "ellipse",
+        "amplitude_m": 0.414047653189881,
+        "omega_rad_s": 1.7818784442328677,
+        "phase_rad": 1.8448275158945622,
+        "rotation_rad": 1.4230220092250647,
+        "ramp_s": 4.776504168024918
+      },
+      {
+        "kind": "burst",
+        "amplitude_m": 0.6189069294270778,
+        "omega_rad_s": 1.7126347177882808,
+        "phase_rad": 0.6569116786021407,
+        "rotation_rad": 1.0590706747228094,
+        "ramp_s": 4.195614183357835
+      },
+      {
+        "kind": "chirp",
+        "amplitude_m": 0.9971674234719736,
+        "omega_rad_s": 1.8442761111970898,
+        "phase_rad": 0.4707686956230037,
+        "rotation_rad": 1.413824276322413,
+        "ramp_s": 3.9709564302041827
+      },
+      {
+        "kind": "single_axis",
+        "amplitude_m": 1.172912860981221,
+        "omega_rad_s": 1.8561471723601193,
+        "phase_rad": 0.4836978965750047,
+        "rotation_rad": 3.0561390507445996,
+        "ramp_s": 4.745036392738783
+      }
+    ],
+    "test_kind": "held_out_chirp"
+  },
+  "config_sha256": "73f3a9c0f848302c63fb5cfea722c56a3691b3d696b37edf6e142d2b6cb34d8c",
+  "trajectory_code_sha256": "08b971b73ce3a35f81a86b6ef456b3a3f6f2abc1cd4b0cbe5f9fb77e9ad54a81",
+  "requested_attitude_target_telemetry_hz": 50,
+  "truth": "repository projection angles from Gazebo world relative link positions",
+  "model": "/mnt/d/RPi_Deployment/EKF-LSTM_for_Swing_Angle_Estimation-main/simulation/models/iris_slung_load/iris_slung_load.sdf",
+  "model_sha256": "fcfa19831973bd74be64d4eadc4ebf7be0b26c73faf7019a6e35ee510a5bea9e",
+  "world_sha256": "e4fe2330913ce499f7fd9be6e0d3b6cac64571d7b276b1022855ede0787dbdcd",
+  "takeoff_support": "deleted after vehicle rises 0.3 m; absent during recording",
+  "collector_sha256": "8f0d7343a4ec4951712ad3adf11dbab1c30dceb7e9dee01a22def4b161ce03dc",
+  "rows": 9000,
+  "skipped": 0,
+  "start_sim_time": 24.068,
+  "landed_disarmed": true,
+  "origin_local": [
+    0.0027406110893934965,
+    -0.013797472231090069,
+    0.06249713897705078
+  ],
+  "target_z": 3.062497138977051,
+  "csv_sha256": "b7427d35e5a96219b00b8b4161997cbfd5ebe934148538c16144b77795d8806c"
+}

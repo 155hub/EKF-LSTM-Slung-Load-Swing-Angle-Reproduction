@@ -1,0 +1,41 @@
+{
+  "flight_id": "test_04",
+  "split": "test",
+  "seed": 20261217,
+  "duration_s": 180,
+  "stages": [
+    {
+      "kind": "burst",
+      "amplitude_m": 0.3940197834051975,
+      "omega_rad_s": 1.6633612645564388,
+      "phase_rad": -0.7755335464149544,
+      "rotation_rad": 1.555213184487834,
+      "ramp_s": 4.854559108492551
+    },
+    {
+      "kind": "lissajous",
+      "amplitude_m": 0.6080614932393139,
+      "omega_rad_s": 1.8511366333495411,
+      "phase_rad": -2.7096312208796496,
+      "rotation_rad": 2.453717922324315,
+      "ramp_s": 4.085314942580851
+    },
+    {
+      "kind": "chirp",
+      "amplitude_m": 0.9548837682245448,
+      "omega_rad_s": 1.7756069891083008,
+      "phase_rad": -1.6575774831866332,
+      "rotation_rad": 1.4371222276968156,
+      "ramp_s": 4.708546776249929
+    },
+    {
+      "kind": "single_axis",
+      "amplitude_m": 1.1324999579309456,
+      "omega_rad_s": 1.6510861759090383,
+      "phase_rad": 2.5735450389679864,
+      "rotation_rad": -1.9421097845576174,
+      "ramp_s": 4.018998498903124
+    }
+  ],
+  "test_kind": "held_out_chirp"
+}

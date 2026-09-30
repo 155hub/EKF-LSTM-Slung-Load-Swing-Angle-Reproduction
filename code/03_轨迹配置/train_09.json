@@ -1,0 +1,41 @@
+{
+  "flight_id": "train_09",
+  "split": "train",
+  "seed": 20261022,
+  "duration_s": 180,
+  "stages": [
+    {
+      "kind": "single_axis",
+      "amplitude_m": 0.41981744797276516,
+      "omega_rad_s": 1.6621289471954914,
+      "phase_rad": 2.0333016573414007,
+      "rotation_rad": -1.6936500695091816,
+      "ramp_s": 3.504388649541838
+    },
+    {
+      "kind": "lissajous",
+      "amplitude_m": 0.6796204586979598,
+      "omega_rad_s": 1.6829175108281726,
+      "phase_rad": -1.8921695528205664,
+      "rotation_rad": -1.203014993490324,
+      "ramp_s": 4.553077558015746
+    },
+    {
+      "kind": "burst",
+      "amplitude_m": 0.9709690699715956,
+      "omega_rad_s": 1.6766497428346006,
+      "phase_rad": -1.9262047251925436,
+      "rotation_rad": -2.1972996075235525,
+      "ramp_s": 3.673729608392406
+    },
+    {
+      "kind": "ellipse",
+      "amplitude_m": 1.1645286660016247,
+      "omega_rad_s": 1.6512735232504374,
+      "phase_rad": -2.4195546019264946,
+      "rotation_rad": -2.2560921047150666,
+      "ramp_s": 4.021556677017056
+    }
+  ],
+  "test_kind": "same_family_new_parameters"
+}

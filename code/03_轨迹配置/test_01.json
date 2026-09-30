@@ -1,0 +1,41 @@
+{
+  "flight_id": "test_01",
+  "split": "test",
+  "seed": 20261214,
+  "duration_s": 180,
+  "stages": [
+    {
+      "kind": "burst",
+      "amplitude_m": 0.37604768104377045,
+      "omega_rad_s": 1.6594949030104411,
+      "phase_rad": -2.104847049306743,
+      "rotation_rad": 2.5619802358373205,
+      "ramp_s": 3.6221007738189606
+    },
+    {
+      "kind": "ellipse",
+      "amplitude_m": 0.6787725273405459,
+      "omega_rad_s": 1.665254614225733,
+      "phase_rad": 0.3049993208455284,
+      "rotation_rad": 2.6258253248040537,
+      "ramp_s": 3.6710564562737145
+    },
+    {
+      "kind": "lissajous",
+      "amplitude_m": 0.9654560732409735,
+      "omega_rad_s": 1.880392058513939,
+      "phase_rad": -2.932626836181941,
+      "rotation_rad": -0.5851063656902213,
+      "ramp_s": 4.667667352400708
+    },
+    {
+      "kind": "single_axis",
+      "amplitude_m": 1.0969101551325486,
+      "omega_rad_s": 1.6967444807860752,
+      "phase_rad": 1.0858147709268593,
+      "rotation_rad": 2.376663498800726,
+      "ramp_s": 4.28372579219811
+    }
+  ],
+  "test_kind": "same_family_new_parameters"
+}
